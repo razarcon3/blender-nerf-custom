@@ -19,6 +19,8 @@ class TTC_UI(bpy.types.Panel):
 
         layout.use_property_split = True
         layout.prop(scene, 'ttc_nb_frames')
+        layout.prop(scene, 'ttc_frame_step')
+        layout.prop(scene, 'ttc_use_windows_path')
         layout.prop_search(scene, 'camera_train_target', scene, 'objects')
         layout.prop_search(scene, 'camera_test_target', scene, 'objects')
 

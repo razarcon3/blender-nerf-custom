@@ -40,13 +40,19 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         # initial properties might have changed since set_init_props update
         scene.init_output_path = scene.render.filepath
         scene.init_frame_end = scene.frame_end
+        scene.init_frame_step = scene.frame_step
+        scene.frame_step = scene.ttc_frame_step
 
         if scene.test_data:
             # testing transforms
+            scene.render.filepath = os.path.join(output_path, 'test', '') # force clean filename
             test_frames = self.get_camera_extrinsics(scene, test_camera, mode='TEST', method='TTC')
             for frame in test_frames:
                 path, filename = os.path.split(frame['file_path'])
-                frame['file_path'] = os.path.join(path, 'eval_' + filename)
+                new_path = os.path.join(path, 'eval_' + filename)
+                if not scene.ttc_use_windows_path:
+                    new_path = new_path.replace(os.sep, '/')
+                frame['file_path'] = new_path
             output_data['frames'] += test_frames
             
             # rendering
@@ -61,10 +67,14 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         print("rendering train data")
         if scene.train_data:
             # training transforms
+            scene.render.filepath = os.path.join(output_path, 'train', '') # force clean filename
             train_frames = self.get_camera_extrinsics(scene, train_camera, mode='TRAIN', method='TTC')
             for frame in train_frames:
                 path, filename = os.path.split(frame['file_path'])
-                frame['file_path'] = os.path.join(path, 'train_' + filename)
+                new_path = os.path.join(path, 'train_' + filename)
+                if not scene.ttc_use_windows_path:
+                    new_path = new_path.replace(os.sep, '/')
+                frame['file_path'] = new_path
             output_data['frames'] += train_frames
 
             self.save_json(output_path, 'transforms.json', output_data)
@@ -81,6 +91,10 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
 
         # if frames are rendered, the below code is executed by the handler function
         if not any(scene.rendering) and os.path.exists(output_path):
+            # restore properties
+            scene.frame_step = scene.init_frame_step
+            scene.frame_end = scene.init_frame_end
+
             # compress dataset and remove folder (only keep zip)
             shutil .make_archive(output_path, 'zip', output_path) # output filename = output_path
             shutil.rmtree(output_path)

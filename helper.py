@@ -197,6 +197,8 @@ def post_render(scene):
 
         if scene.rendering[1]: # ttc : reset frame end
             scene.frame_end = scene.init_frame_end
+            scene.frame_step = scene.init_frame_step
+
 
         if scene.rendering[2]: # cos : reset camera settings
             if not scene.init_camera_exists: delete_camera(scene, CAMERA_NAME)

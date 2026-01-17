@@ -45,6 +45,8 @@ PROPS = [
     # ttc properties
     ('ttc_dataset_name', bpy.props.StringProperty(name='Name', description='Name of the TTC dataset : the data will be stored under <save path>/<name>', default='dataset') ),
     ('ttc_nb_frames', bpy.props.IntProperty(name='Frames', description='Number of training frames from the training camera', default=100, soft_min=1) ),
+    ('ttc_frame_step', bpy.props.IntProperty(name='Frame Step', description='Frame step N for the captured training frames. Every N-th frame will be used', default=1, soft_min=1) ),
+    ('ttc_use_windows_path', bpy.props.BoolProperty(name='Windows Path', description='Whether to use Windows path separators (\\) in the transforms.json file', default=False) ),
     ('camera_train_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TRAIN_CAM, description='Pointer to the training camera', poll=helper.poll_is_camera) ),
     ('camera_test_target', bpy.props.PointerProperty(type=bpy.types.Object, name=TEST_CAM, description='Pointer to the testing camera', poll=helper.poll_is_camera) ),
 
