@@ -42,6 +42,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         scene.init_frame_end = scene.frame_end
         scene.init_frame_step = scene.frame_step
         scene.frame_step = scene.ttc_frame_step
+        scene.frame_end = scene.frame_start + scene.ttc_nb_frames - 1
 
         if scene.test_data:
             # testing transforms
@@ -60,7 +61,6 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
                 output_test = os.path.join(output_path, 'test')
                 os.makedirs(output_test, exist_ok=True)
                 scene.camera = test_camera
-                scene.frame_end = scene.frame_start + scene.ttc_nb_frames - 1 # update end frame
                 scene.render.filepath = os.path.join(output_test, 'eval_') # training frames path
                 bpy.ops.render.render(animation=True, write_still=True) # render scene
 
@@ -84,7 +84,6 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
                 os.makedirs(output_train, exist_ok=True)
                 scene.rendering = (False, True, False)
                 scene.camera = train_camera
-                scene.frame_end = scene.frame_start + scene.ttc_nb_frames - 1 # update end frame
                 scene.render.filepath = os.path.join(output_train, 'train_') # training frames path
                 bpy.ops.render.render(animation=True, write_still=True) # render scene
 
