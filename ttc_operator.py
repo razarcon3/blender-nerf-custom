@@ -62,7 +62,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
                 os.makedirs(output_test, exist_ok=True)
                 scene.camera = test_camera
                 scene.render.filepath = os.path.join(output_test, 'eval_') # training frames path
-                bpy.ops.render.render(animation=True, write_still=True) # render scene
+                bpy.ops.render.render(animation=False, write_still=True) # render scene
 
         print("rendering train data")
         if scene.train_data:
@@ -85,7 +85,7 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
                 scene.rendering = (False, True, False)
                 scene.camera = train_camera
                 scene.render.filepath = os.path.join(output_train, 'train_') # training frames path
-                bpy.ops.render.render(animation=True, write_still=True) # render scene
+                bpy.ops.render.render(animation=False, write_still=True) # render scene
 
 
         # if frames are rendered, the below code is executed by the handler function
